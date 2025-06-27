@@ -59,10 +59,10 @@ class Stopwatch {
 		stage.addChild(this.clockContainer);
 		
 		// Load stopwatch images
-		this.loadStopwatchImage("bg", "../template/assets/images/stopwatch.svg", x, y);
-		this.loadStopwatchImage("play", "../template/assets/images/play.svg", x + 100, y + 95);
-		this.loadStopwatchImage("pause", "../template/assets/images/stop.svg", x + 100, y + 95);
-		this.loadStopwatchImage("reset", "../template/assets/images/reset.svg", x + 140, y + 95);
+		this.loadStopwatchImage("bg", "./template/assets/images/stopwatch.svg", x, y);
+		this.loadStopwatchImage("play", "./template/assets/images/play.svg", x + 100, y + 95);
+		this.loadStopwatchImage("pause", "./template/assets/images/stop.svg", x + 100, y + 95);
+		this.loadStopwatchImage("reset", "./template/assets/images/reset.svg", x + 140, y + 95);
 		
 		this.getName("pause").visible = false;
 		
