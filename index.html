@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- ========== Meta Information ========== -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Virtual lab to calculate the moment of inertia of a flywheel." />
+    <meta name="author" content="Asmin Bhattarai" />
+    <title>Physics Lab 1</title>
+
+    <!-- ========== Favicons & Web App Manifest ========== -->
+    <link rel="icon" type="image/png" sizes="96x96" href="./favicon/favicon-96x96.png" />
+    <link rel="icon" type="image/svg+xml" href="./favicon/favicon.svg" />
+    <link rel="shortcut icon" href="./favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Physics Lab 1" />
+    <link rel="manifest" href="./site.webmanifest" />
+
+    <!-- ========== Stylesheets ========== -->
+    <link rel="stylesheet" href="./template/assets/css/app.css" />
+    <link rel="stylesheet" href="./template/components/angular-material/angular-material.css" />
+
+    <!-- ========== Preload Critical Scripts ========== -->
+    <link rel="preload" href="./template/js/loading.js" as="script">
+    <link rel="preload" href="./template/js/iframe_resize.js" as="script">
+
+    <!-- ========== JavaScript Libraries ========== -->
+    <script src="./template/js/stopwatch.js"></script>
+    <script src="./template/js/createjs.min.js"></script>
+    <script src="./template/js/canvasjs.min.js"></script>
+
+    <!-- ========== Angular Libraries ========== -->
+    <script src="./template/components/angular/angular.min.js"></script>
+    <script src="./template/components/angular-aria/angular-aria.js"></script>
+    <script src="./template/components/angular-animate/angular-animate.js"></script>
+    <script src="./template/components/angular-material/angular-material.js"></script>
+    <script src="./template/components/angular-fullscreen/angular-fullscreen.js"></script>
+
+    <!-- ========== Application Scripts ========== -->
+    <script src="./src/user_controller.js"></script>
+    <script src="./src/view.js"></script>
+    <script src="./src/experiment.js"></script>
+
+    <!-- ========== Angular App Configuration ========== -->
+    <script>
+        angular.module('starterApp', ['ngMaterial', 'users'])
+            .config(function ($mdThemingProvider, $mdIconProvider) {
+                $mdIconProvider
+                    .icon("menu", "./template/assets/images/menu.svg", 24)
+                    .icon("fullscreen", "./template/assets/images/full_screen_icon.svg", 24)
+                    .icon("help", "./template/assets/images/help_icon.svg", 24);
+                $mdThemingProvider.theme('default')
+                    .primaryPalette('blue')
+                    .accentPalette('red');
+            });
+    </script>
+</head>
+
+<body ng-app="starterApp" ng-controller="UserController as ul">
+
+    <!-- ========== Top Toolbar ========== -->
+    <md-toolbar class="md-toolbar-tools" id="main">
+        <md-button class="md-icon-button" hide-gt-md ng-click="ul.toggleList()" aria-label="Toggle Menu">
+            <md-icon md-svg-icon="menu"><span class="sr-only">Menu</span></md-icon>
+        </md-button>
+        <h1 flex class="expTitle" id="expTitle">{{heading}}</h1>
+        <md-button class="md-icon-button" aria-label="Help" ng-click="showActionToast()">
+            <md-icon md-svg-icon="help"><span class="sr-only">Help</span></md-icon>
+        </md-button>
+        <md-button class="md-icon-button" aria-label="Fullscreen" ng-click="goFullscreen()">
+            <md-icon md-svg-icon="fullscreen"><span class="sr-only">Fullscreen</span></md-icon>
+        </md-button>
+    </md-toolbar>
+
+    <!-- ========== Main Content Layout ========== -->
+    <md-content flex layout="row">
+
+        <!-- ========== Canvas Area ========== -->
+        <md-content id="content" layout="column">
+            <canvas id="demoCanvas" width="700" height="700" experiment></canvas>
+            <div id="Copyright">{{copyright}}</div>
+        </md-content>
+
+        <!-- ========== Sidebar Controls ========== -->
+        <md-sidenav class="site-sidenav md-sidenav-left" md-component-id="right" md-is-locked-open="$mdMedia('gt-md')">
+            <div>
+
+                <!-- ▼ Variable Controls -->
+                <md-button class="md-raised md-primary toolbarbutton subTitle" ng-click="toggle1()">
+                    {{variables}}
+                    <md-icon md-svg-src="md-toggle-arrow"
+                        ng-class="{true: 'rotate', false: 'rotateCounterwise'}[isActive1]"></md-icon>
+                </md-button>
+
+                <div ng-hide="showVariables" class="div">
+
+                    <!-- Environment Selection -->
+                    <md-content class="md-title selectable" layout-padding>{{choose_environment}}</md-content>
+                    <md-select id="select_enviro" placeholder="{{earth}}" ng-disabled="control_disable"
+                        ng-model="Enviornment" ng-change="changeEnviornment();" aria-label="Environment">
+                        <md-option ng-repeat="x in enviornment_array" value="{{x.type}}">
+                            {{x.enviornment}}
+                        </md-option>
+                    </md-select>
+
+                    <!-- Flywheel Mass -->
+                    <md-content class="md-title selectable" layout-padding>
+                        {{mass_of_fly_wheel_lbl}} {{mass_of_fly_wheel}} {{kg}}
+                    </md-content>
+                    <md-slider flex md-discrete ng-disabled="control_disable" ng-model="mass_of_fly_wheel" step="0.5"
+                        min="5" max="50" ng-change="massOfWheel();" aria-label="Mass of Flywheel in kg"
+                        aria-valuemin="5" aria-valuemax="50" aria-valuenow="{{mass_of_fly_wheel}}"></md-slider>
+
+                    <!-- Flywheel Diameter -->
+                    <md-content class="md-title selectable" layout-padding>
+                        {{dia_of_fly_wheel_lbl}} {{dia_of_fly_wheel}} {{cm}}
+                    </md-content>
+                    <md-slider flex md-discrete ng-disabled="control_disable" ng-model="dia_of_fly_wheel" step="1"
+                        min="10" max="30" ng-change="diameterOfWheel();" aria-label="Diameter of Flywheel in centimeters"
+                        aria-valuemin="10" aria-valuemax="30" aria-valuenow="{{dia_of_fly_wheel}}"></md-slider>
+
+                    <!-- Rings Mass -->
+                    <md-content class="md-title selectable" layout-padding>
+                        {{mass_of_rings_lbl}} {{mass_of_rings}} {{gm}}
+                    </md-content>
+                    <md-slider flex md-discrete ng-disabled="control_disable" ng-model="mass_of_rings" step="200"
+                        min="200" max="1000" ng-change="massOfRings();" aria-label="Mass of Rings in grams"
+                        aria-valuemin="200" aria-valuemax="1000" aria-valuenow="{{mass_of_rings}}"></md-slider>
+
+                    <!-- Axle Diameter -->
+                    <md-content class="md-title selectable" layout-padding>
+                        {{axle_diameter_lbl}} {{axle_diameter}} {{cm}}
+                    </md-content>
+                    <md-slider flex md-discrete ng-disabled="control_disable" ng-model="axle_diameter" step="0.1"
+                        min="2" max="4" ng-change="diameterOfAxle();" aria-label="Diameter of Axle in centimeters"
+                        aria-valuemin="2" aria-valuemax="4" aria-valuenow="{{axle_diameter}}"></md-slider>
+
+                    <!-- No. of Wounds -->
+                    <md-content class="md-title selectable" layout-padding>
+                        {{no_of_wound_lbl}} {{no_of_wound}}
+                    </md-content>
+                    <md-slider flex md-discrete ng-disabled="control_disable" ng-model="no_of_wound" step="1" min="1"
+                        max="10" ng-change="noOfWounds();" aria-label="Number of Wounds"
+                        aria-valuemin="1" aria-valuemax="10" aria-valuenow="{{no_of_wound}}"></md-slider>
+
+                    <!-- Release Flywheel Button -->
+                    <section layout="row" layout-align="center center">
+                        <md-button class="md-raised" id="release_hold_wheel" ng-model="releaseWheel"
+                            ng-disabled="btn_disabled" ng-click="releaseHoldWheel();">
+                            {{release_hold_txt}}
+                        </md-button>
+                    </section>
+
+                    <!-- Reset Button -->
+                    <section layout="row" layout-align="center center">
+                        <md-button class="md-raised" id="reset" ng-click="resetExp();">
+                            {{reset}}
+                        </md-button>
+                    </section>
+                </div>
+
+                <!-- ▼ Result Panel -->
+                <md-button class="md-raised md-primary toolbarbutton subTitle" ng-click="toggle()">
+                    {{result}}
+                    <md-icon md-svg-src="md-toggle-arrow"
+                        ng-class="{true: 'rotate', false: 'rotateCounterwise'}[isActive]"></md-icon>
+                </md-button>
+
+                <div ng-hide="showValue" class="div">
+                    <md-content class="md-title selectable" layout-padding>
+                        {{mInertia_lbl}}{{mInertia_val}}
+                    </md-content>
+                </div>
+            </div>
+        </md-sidenav>
+    </md-content>
+
+    <!-- ========== Supporting Scripts ========== -->
+    <script src="./template/js/i18n.js"></script>
+    <script src="./template/js/loading.js" defer></script>
+    <script src="./template/js/iframe_resize.js" defer></script>
+
+</body>
+
+</html>
