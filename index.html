@@ -80,7 +80,6 @@
         <!-- ========== Canvas Area ========== -->
         <md-content id="content" layout="column">
             <canvas id="demoCanvas" width="700" height="700" experiment></canvas>
-            <div id="Copyright">{{copyright}}</div>
         </md-content>
 
         <!-- ========== Sidebar Controls ========== -->
@@ -118,8 +117,9 @@
                         {{dia_of_fly_wheel_lbl}} {{dia_of_fly_wheel}} {{cm}}
                     </md-content>
                     <md-slider flex md-discrete ng-disabled="control_disable" ng-model="dia_of_fly_wheel" step="1"
-                        min="10" max="30" ng-change="diameterOfWheel();" aria-label="Diameter of Flywheel in centimeters"
-                        aria-valuemin="10" aria-valuemax="30" aria-valuenow="{{dia_of_fly_wheel}}"></md-slider>
+                        min="10" max="30" ng-change="diameterOfWheel();"
+                        aria-label="Diameter of Flywheel in centimeters" aria-valuemin="10" aria-valuemax="30"
+                        aria-valuenow="{{dia_of_fly_wheel}}"></md-slider>
 
                     <!-- Rings Mass -->
                     <md-content class="md-title selectable" layout-padding>
@@ -142,8 +142,8 @@
                         {{no_of_wound_lbl}} {{no_of_wound}}
                     </md-content>
                     <md-slider flex md-discrete ng-disabled="control_disable" ng-model="no_of_wound" step="1" min="1"
-                        max="10" ng-change="noOfWounds();" aria-label="Number of Wounds"
-                        aria-valuemin="1" aria-valuemax="10" aria-valuenow="{{no_of_wound}}"></md-slider>
+                        max="10" ng-change="noOfWounds();" aria-label="Number of Wounds" aria-valuemin="1"
+                        aria-valuemax="10" aria-valuenow="{{no_of_wound}}"></md-slider>
 
                     <!-- Release Flywheel Button -->
                     <section layout="row" layout-align="center center">
@@ -176,6 +176,11 @@
             </div>
         </md-sidenav>
     </md-content>
+
+    <!-- Footer -->
+    <footer class="footer-toolbar">
+        <span>{{copyright}}</span>
+    </footer>
 
     <!-- ========== Supporting Scripts ========== -->
     <script src="./template/js/i18n.js"></script>

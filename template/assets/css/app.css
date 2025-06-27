@@ -187,3 +187,16 @@ md-tooltip.large .md-content {
 	white-space: nowrap !important;
 	text-overflow: ellipsis;
 }
+
+/* Footer area */
+.footer-toolbar {
+	background-color: #0f69c3;
+	color: #fff;
+	text-align: center;
+	padding: 16px 0;
+	font-size: 16px;
+	position: relative;
+	width: 100%;
+	bottom: 0;
+	left: 0;
+}
