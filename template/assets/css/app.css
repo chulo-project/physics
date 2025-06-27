@@ -9,6 +9,9 @@ body {
 	height: 100%;
 	margin: 0px;
 	padding: 0px;
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
 }
 
 /* Toolbar area */
@@ -195,10 +198,13 @@ md-tooltip.large .md-content {
 	text-align: center;
 	padding: 16px 0;
 	font-size: 16px;
-	position: fixed;
+	position: relative;
 	width: 100%;
 	bottom: 0;
 	left: 0;
-	z-index: 1000;
-	border-top: 1px solid #1976d2;
+	flex-shrink: 0;
+}
+
+md-content[flex], md-content[layout="row"] {
+	flex: 1 0 auto;
 }
