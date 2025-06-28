@@ -509,6 +509,119 @@ function preCalculation(scope) {
 /**
  * Resets all experiment functionality and UI to initial state.
  * Clears all animations, timers, and resets visual elements.
+ * Preserves user settings in dropdown controls.
+ * 
+ * @param {Object} scope - Angular scope object for UI updates
+ */
+function resetExperimentPreserveSettings(scope) {
+    // Set reset flag first to prevent ghost updates
+    reset_flag = true;
+    
+    // Reset UI state
+    scope.release_hold_txt = btn_lbls[0];
+    scope.control_disable = false;
+    
+    // Clear all animations and timers
+    createjs.Tween.removeAllTweens();
+    clearTimeout(rotation_in);
+    clearInterval(tick);
+    clearTimeout(clr_string_intrl);
+    clearInterval(thread_anim_clr);
+    
+    // Reset animation objects
+    thread_anim_object.visible = false;
+    thread_anim_object.x = 298;
+    wound.graphics.clear();
+    
+    // Reset only experiment-specific variables (preserve user settings)
+    iteration = 0;
+    rotation_speed = wheel_rotation_speed = 33600 / 4;
+    speed_correction = 2.0001;
+    thread_anim_frame = 0;
+    time_slots = [];
+    time_slot_indx = 0;
+    rotation = 0;
+    rotation_decimal = 0;
+    thread_anim_width = 199.869;
+    string_x_pos = 0;
+    x_decrement = 0;
+    rolling = false;
+    INTERVAL = 0.2;
+    total_rotation = no_of_wound * 360; // Use current user setting
+    angular_velocity = 0;
+    angular_distance = 0;
+    number_of_rotation = 0;
+    final_rotation = false;
+    
+    // Recalculate physics based on current user settings
+    calculations();
+    
+    // Reset visual elements
+    weight_obj.alpha = 1;
+    weight_obj.y = 0;
+    weight_obj.x = 0;
+    getChildName("texture").y = 130;
+    getChildName("texture_1").y = -231;
+    stage.getChildByName("weights").alpha = 0;
+    
+    // Reset thread animation object
+    thread_anim_object.visible = false;
+    thread_anim_object.x = 298;
+    
+    // Reset weight container to initial position first
+    weight_container.y = 0;
+    weight_container.x = 0;
+    
+    // Reset line mask position
+    line_mask.y = 0;
+    
+    // Reset counter display
+    getChildName("decimal_one").text = "0";
+    getChildName("decimal_ten").text = "0";
+    getChildName("hundred").text = 0;
+    getChildName("ten").text = 0;
+    getChildName("one").text = 0;
+    getChildName("line").y = 0;
+    
+    // Reset physics display
+    scope.mInertia_lbl = _("First start experiment..!");
+    scope.mInertia_val = "";
+    resetWatch();
+    
+    // Redraw string and wound marks based on current user settings
+    drawLongString(385 + (scope.no_of_wound - 1) * 3);
+    
+    // Redraw wound marks for current number of wounds
+    for (let i = 385; i < 385 + (scope.no_of_wound - 1) * 3; i += 3) {
+        generateWound(i);
+    }
+    
+    // Update weight positioning based on current settings
+    weight_container.y = (scope.no_of_wound - 1) * 30 * -1;
+    weight_container.x = (scope.no_of_wound - 1) * 3;
+    line_mask.y = weight_obj.y;
+    
+    // Update height display based on current number of wounds
+    getChildName("height_txt").text = (no_of_wound < 5 ? '0' : '') + no_of_wound * 2 + "cm";
+    
+    // Update weight visibility based on current mass of rings setting
+    massOfRingsChange(scope);
+    
+    stage.update();
+    
+    // Reattach play button event listener
+    if (!clockContainer.getChildByName("play").hasEventListener("click")) {
+        play_event = clockContainer.getChildByName("play").on("click", () => {
+            releaseHold(scope);
+            scope.$apply();
+        });
+    }
+}
+
+/**
+ * Resets all experiment functionality and UI to initial state.
+ * Clears all animations, timers, and resets visual elements.
+ * Resets all user settings to default values.
  * 
  * @param {Object} scope - Angular scope object for UI updates
  */
@@ -532,7 +645,7 @@ function resetExperiment(scope) {
     thread_anim_object.x = 298;
     wound.graphics.clear();
     
-    // Reset variables and controls
+    // Reset variables and controls (this resets all user settings to defaults)
     iteration = 0;
     initialisationOfImages();
     initialisationOfControls(scope);
@@ -580,3 +693,6 @@ var autoTimePauseEnabled = false;
 function toggleAutoTimePause() {
     autoTimePauseEnabled = !autoTimePauseEnabled;
 }
+
+// Expose reset functions globally
+window.resetExperimentPreserveSettings = resetExperimentPreserveSettings;

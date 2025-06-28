@@ -177,8 +177,10 @@ function directiveFunction() {
             quickResetBtn.onclick = function() {
                 if (window.angular && angular.element) {
                     var ngScope = angular.element(document.body).scope();
-                    if (ngScope && ngScope.resetExp) {
-                        ngScope.$apply(function() { ngScope.resetExp(); });
+                    if (ngScope && window.resetExperimentPreserveSettings) {
+                        ngScope.$apply(function() { 
+                            window.resetExperimentPreserveSettings(ngScope); 
+                        });
                     }
                 }
             };
