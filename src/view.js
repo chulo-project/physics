@@ -125,7 +125,7 @@
                 
                 // Create Auto Clock Control button
                 var autoClockControlBtn = document.createElement('button');
-                autoClockControlBtn.innerHTML = '<span style="display: inline-block; width: 120px;">Auto Clock Control: OFF</span>'; // Placeholder text
+                autoClockControlBtn.innerHTML = '<span style="display: inline-block; width: 160px; white-space: nowrap;">Auto Clock Control: OFF</span>'; // Placeholder text
                 autoClockControlBtn.style.cssText = 'padding: 10px 20px; background: #2196F3; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; transition: all 0.3s ease;';
                 autoClockControlBtn.onmouseover = function() { this.style.background = '#1976D2'; };
                 autoClockControlBtn.onmouseout = function() { this.style.background = '#2196F3'; };
@@ -133,15 +133,15 @@
                 // Create Quick Reset button
                 var quickResetBtn = document.createElement('button');
                 quickResetBtn.textContent = 'Quick Reset'; // Placeholder text
-                quickResetBtn.style.cssText = 'padding: 10px 20px; background: #FF9800; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; transition: all 0.3s ease;';
-                quickResetBtn.onmouseover = function() { this.style.background = '#F57C00'; };
-                quickResetBtn.onmouseout = function() { this.style.background = '#FF9800'; };
+                quickResetBtn.style.cssText = 'padding: 10px 20px; background: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; transition: all 0.3s ease;';
+                quickResetBtn.onmouseover = function() { this.style.background = '#d32f2f'; };
+                quickResetBtn.onmouseout = function() { this.style.background = '#f44336'; };
                 
                 // Function to update button text when language loads
                 function updateButtonText() {
                     if (window._) {
                         startExperimentBtn.textContent = _('Start Experiment');
-                        autoClockControlBtn.innerHTML = '<span style="display: inline-block; width: 120px;">' + _('Auto Clock Control') + ': ' + _('OFF') + '</span>';
+                        autoClockControlBtn.innerHTML = '<span style="display: inline-block; width: 160px; white-space: nowrap;">' + _('Auto Clock Control') + ': ' + _('OFF') + '</span>';
                         quickResetBtn.textContent = _('Quick Reset');
                         // Also update the auto clock control button state
                         setAutoClockControlBtnState();
@@ -169,7 +169,7 @@
 
                 function setAutoClockControlBtnState() {
                     var state = (window.FlywheelExperiment && window.FlywheelExperiment.autoClockControlEnabled) ? _("ON") : _("OFF");
-                    autoClockControlBtn.innerHTML = '<span style="display: inline-block; width: 120px;">' + _("Auto Clock Control") + ': ' + state + '</span>';
+                    autoClockControlBtn.innerHTML = '<span style="display: inline-block; width: 160px; white-space: nowrap;">' + _("Auto Clock Control") + ': ' + state + '</span>';
                 }
                 setAutoClockControlBtnState();
 
