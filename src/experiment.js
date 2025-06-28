@@ -70,6 +70,8 @@
         
         // Initialize experiment on first run
         if (!FlywheelView.rolling) {
+            // Ensure total_rotation is properly set before calculations
+            FlywheelView.total_rotation = FlywheelView.no_of_wound * 360;
             preCalculation(scope);
             FlywheelView.string_intrl = FlywheelView.time_slots[0] / 200;
             releaseWound(556 - (FlywheelView.no_of_wound - 1) * 30);
