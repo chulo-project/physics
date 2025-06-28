@@ -112,61 +112,49 @@
                 if (window.stageUpdateInterval) clearInterval(window.stageUpdateInterval);
                 window.stageUpdateInterval = setInterval(function () { stage.update(); }, 16); // ~60 FPS
 
-                // --- Add Auto Clock Control Button ---
+                // Create the button bar container
                 var buttonBar = document.createElement('div');
-                buttonBar.style.position = 'relative';
-                buttonBar.style.display = 'flex';
-                buttonBar.style.flexWrap = 'wrap';
-                buttonBar.style.gap = '10px';
-                buttonBar.style.justifyContent = 'center';
-                buttonBar.style.alignItems = 'center';
-                buttonBar.style.margin = '10px 0';
-                buttonBar.style.padding = '10px';
-                buttonBar.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-                buttonBar.style.borderRadius = '8px';
-                buttonBar.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
-
+                buttonBar.style.cssText = 'display: flex; gap: 10px; margin: 10px 0; justify-content: center; align-items: center; flex-wrap: wrap;';
+                
+                // Create Start Experiment button
                 var startExperimentBtn = document.createElement('button');
-                startExperimentBtn.id = 'startExperimentBtn';
-                startExperimentBtn.style.padding = '8px 16px';
-                startExperimentBtn.style.fontSize = '1em';
-                startExperimentBtn.style.cursor = 'pointer';
-                startExperimentBtn.style.background = '#4CAF50';
-                startExperimentBtn.style.color = '#fff';
-                startExperimentBtn.style.border = 'none';
-                startExperimentBtn.style.borderRadius = '4px';
-                startExperimentBtn.style.transition = 'background 0.2s';
-                startExperimentBtn.innerText = 'Start Experiment';
-                startExperimentBtn.onmouseover = function() { startExperimentBtn.style.background = '#388E3C'; };
-                startExperimentBtn.onmouseout = function() { startExperimentBtn.style.background = '#4CAF50'; };
-
+                startExperimentBtn.textContent = 'Start Experiment'; // Placeholder text
+                startExperimentBtn.style.cssText = 'padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; transition: all 0.3s ease;';
+                startExperimentBtn.onmouseover = function() { this.style.background = '#45a049'; };
+                startExperimentBtn.onmouseout = function() { this.style.background = '#4CAF50'; };
+                
+                // Create Auto Clock Control button
                 var autoClockControlBtn = document.createElement('button');
-                autoClockControlBtn.id = 'autoClockControlBtn';
-                autoClockControlBtn.style.padding = '8px 16px';
-                autoClockControlBtn.style.fontSize = '1em';
-                autoClockControlBtn.style.cursor = 'pointer';
-                autoClockControlBtn.style.background = '#2196F3';
-                autoClockControlBtn.style.color = '#fff';
-                autoClockControlBtn.style.border = 'none';
-                autoClockControlBtn.style.borderRadius = '4px';
-                autoClockControlBtn.style.transition = 'background 0.2s';
-                autoClockControlBtn.innerText = 'Auto Clock Control: OFF';
-                autoClockControlBtn.onmouseover = function() { autoClockControlBtn.style.background = '#1976D2'; };
-                autoClockControlBtn.onmouseout = function() { autoClockControlBtn.style.background = '#2196F3'; };
-
+                autoClockControlBtn.innerHTML = '<span style="display: inline-block; width: 120px;">Auto Clock Control: OFF</span>'; // Placeholder text
+                autoClockControlBtn.style.cssText = 'padding: 10px 20px; background: #2196F3; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; transition: all 0.3s ease;';
+                autoClockControlBtn.onmouseover = function() { this.style.background = '#1976D2'; };
+                autoClockControlBtn.onmouseout = function() { this.style.background = '#2196F3'; };
+                
+                // Create Quick Reset button
                 var quickResetBtn = document.createElement('button');
-                quickResetBtn.id = 'quickResetBtn';
-                quickResetBtn.style.padding = '8px 16px';
-                quickResetBtn.style.fontSize = '1em';
-                quickResetBtn.style.cursor = 'pointer';
-                quickResetBtn.style.background = '#f44336';
-                quickResetBtn.style.color = '#fff';
-                quickResetBtn.style.border = 'none';
-                quickResetBtn.style.borderRadius = '4px';
-                quickResetBtn.style.transition = 'background 0.2s';
-                quickResetBtn.innerText = 'Reset';
-                quickResetBtn.onmouseover = function() { quickResetBtn.style.background = '#d32f2f'; };
-                quickResetBtn.onmouseout = function() { quickResetBtn.style.background = '#f44336'; };
+                quickResetBtn.textContent = 'Quick Reset'; // Placeholder text
+                quickResetBtn.style.cssText = 'padding: 10px 20px; background: #FF9800; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; transition: all 0.3s ease;';
+                quickResetBtn.onmouseover = function() { this.style.background = '#F57C00'; };
+                quickResetBtn.onmouseout = function() { this.style.background = '#FF9800'; };
+                
+                // Function to update button text when language loads
+                function updateButtonText() {
+                    if (window._) {
+                        startExperimentBtn.textContent = _('Start Experiment');
+                        autoClockControlBtn.innerHTML = '<span style="display: inline-block; width: 120px;">' + _('Auto Clock Control') + ': ' + _('OFF') + '</span>';
+                        quickResetBtn.textContent = _('Quick Reset');
+                        // Also update the auto clock control button state
+                        setAutoClockControlBtnState();
+                    }
+                }
+                
+                // Set up language loaded callback
+                window.onLanguageLoaded = function() {
+                    updateButtonText();
+                };
+                
+                // Also try to update immediately in case language is already loaded
+                setTimeout(updateButtonText, 100);
 
                 // Helper to update pause button state based on auto clock control and height
                 function updatePauseBtnState() {
@@ -180,8 +168,8 @@
                 window.updatePauseBtnState = updatePauseBtnState;
 
                 function setAutoClockControlBtnState() {
-                    var state = (window.FlywheelExperiment && window.FlywheelExperiment.autoClockControlEnabled) ? 'ON' : 'OFF';
-                    autoClockControlBtn.innerHTML = 'Auto Clock Control: <span style="display:inline-block;width:2em;text-align:center;">' + state + '</span>';
+                    var state = (window.FlywheelExperiment && window.FlywheelExperiment.autoClockControlEnabled) ? _("ON") : _("OFF");
+                    autoClockControlBtn.innerHTML = '<span style="display: inline-block; width: 120px;">' + _("Auto Clock Control") + ': ' + state + '</span>';
                 }
                 setAutoClockControlBtnState();
 

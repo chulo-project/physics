@@ -40,6 +40,13 @@
         "Uranus, g=10.5m/s": "Uranus, g=10.5 m/s²",
         "Saturn, g=11.08m/s": "Saturn, g=11.08 m/s²",
         "Jupiter, g=25.95m/s": "Jupiter, g=25.95 m/s²",
-        "Moment of Inertia of Flywheel: ": "Moment of Inertia of Flywheel: "
+        "Moment of Inertia of Flywheel: ": "Moment of Inertia of Flywheel: ",
+        "Start Experiment": "Start Experiment",
+        "Auto Clock Control": "Auto Clock Control",
+        "Auto Clock Control: ON": "Auto Clock Control: ON",
+        "Auto Clock Control: OFF": "Auto Clock Control: OFF",
+        "ON": "ON",
+        "OFF": "OFF",
+        "Quick Reset": "Quick Reset"
     }
 }

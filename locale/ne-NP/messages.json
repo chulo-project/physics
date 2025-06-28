@@ -40,6 +40,13 @@
         "Uranus, g=10.5m/s": "यूरेनस, g=१०.५ मी/से²",
         "Saturn, g=11.08m/s": "शनि, g=११.०८ मी/से²",
         "Jupiter, g=25.95m/s": "बृहस्पति, g=२५.९५ मी/से²",
-        "Moment of Inertia of Flywheel: ": "फ्लाईव्हीलको जडत्व मोमेन्ट: "
+        "Moment of Inertia of Flywheel: ": "फ्लाईव्हीलको जडत्व मोमेन्ट: ",
+        "Start Experiment": "प्रयोग सुरु गर्नुहोस्",
+        "Auto Clock Control": "स्वचालित घडी नियन्त्रण",
+        "Auto Clock Control: ON": "स्वचालित घडी नियन्त्रण: सक्रिय",
+        "Auto Clock Control: OFF": "स्वचालित घडी नियन्त्रण: निष्क्रिय",
+        "ON": "सक्रिय",
+        "OFF": "निष्क्रिय",
+        "Quick Reset": "छिटो रिसेट"
     }
 }
