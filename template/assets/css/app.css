@@ -208,3 +208,112 @@ md-tooltip.large .md-content {
 md-content[flex], md-content[layout="row"] {
 	flex: 1 0 auto;
 }
+
+/* Custom Toast Styling to fix mobile and desktop issues */
+md-toast {
+  /* Override default height constraints */
+  min-height: 48px !important;
+  max-height: none !important;
+  height: auto !important;
+  
+  /* Better text handling */
+  word-wrap: break-word;
+  white-space: normal;
+  line-height: 1.4;
+  
+  /* Improved padding for better text display */
+  padding: 12px 24px !important;
+}
+
+/* Mobile-specific toast fixes */
+@media (max-width: 600px) {
+  md-toast {
+    /* Reduce width on mobile - not full width */
+    width: calc(100% - 32px) !important;
+    max-width: calc(100% - 32px) !important;
+    left: 16px !important;
+    right: 16px !important;
+    
+    /* Better bottom positioning */
+    bottom: 20px !important;
+    
+    /* Maintain border radius on mobile */
+    border-radius: 4px !important;
+    
+    /* Ensure text doesn't overflow */
+    font-size: 14px !important;
+    padding: 16px 20px !important;
+  }
+  
+  md-toast.md-top {
+    top: 80px !important;
+    bottom: auto !important;
+  }
+}
+
+/* Desktop-specific toast fixes */
+@media (min-width: 600px) {
+  md-toast {
+    /* Better positioning from bottom on large screens */
+    bottom: 24px !important;
+    
+    /* Improved width constraints */
+    min-width: 320px !important;
+    max-width: 600px !important;
+    
+    /* Better text handling */
+    font-size: 15px !important;
+    padding: 16px 24px !important;
+  }
+  
+  md-toast.md-bottom {
+    bottom: 24px !important;
+  }
+  
+  md-toast.md-left {
+    left: 24px !important;
+  }
+  
+  md-toast.md-right {
+    right: 24px !important;
+  }
+  
+  md-toast.md-top {
+    top: 80px !important;
+  }
+}
+
+/* Large screen optimizations */
+@media (min-width: 1200px) {
+  md-toast {
+    max-width: 600px !important;
+    bottom: 32px !important;
+  }
+  
+  md-toast.md-bottom {
+    bottom: 32px !important;
+  }
+}
+
+/* Ensure toast content is properly displayed */
+md-toast span[flex] {
+  /* Allow text to wrap properly */
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  
+  /* Better line height for readability */
+  line-height: 1.5 !important;
+  
+  /* Ensure proper display */
+  display: block !important;
+  flex: 1 !important;
+}
+
+/* Action button styling */
+md-toast .md-action {
+  /* Better button positioning */
+  margin-left: 16px !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}

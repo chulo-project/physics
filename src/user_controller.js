@@ -124,9 +124,9 @@ let temp_scope;
 
         // UI state variables
         $scope.showValue = true; /*  It hides the 'Result' tab */
-        $scope.showVariables = false; /*  I hides the 'Variables' tab */
+        $scope.showVariables = false; /*  It hides the 'Variables' tab */
         $scope.isActive = true;
-        $scope.isActive1 = true;
+        $scope.isActive1 = false;
 
         /**
          * Toggles fullscreen mode for the experiment.
@@ -140,6 +140,18 @@ let temp_scope;
             }
             /*  Set Full screen to a specific element (bad practice) */
             /*  Full screen.enable( document.getElementById('img') ) */
+        };
+
+        /**
+         * Switches between English and Nepali languages by changing URL parameter.
+         */
+        $scope.switchLanguage = () => {
+            const currentLang = getParameterByName('lan') || 'en-NP';
+            const newLang = currentLang === 'en-NP' ? 'ne-NP' : 'en-NP';
+            
+            const url = new URL(window.location);
+            url.searchParams.set('lan', newLang);
+            window.location.href = url.toString();
         };
 
         /**

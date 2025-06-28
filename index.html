@@ -50,7 +50,8 @@
                 $mdIconProvider
                     .icon("menu", "./template/assets/images/menu.svg", 24)
                     .icon("fullscreen", "./template/assets/images/full_screen_icon.svg", 24)
-                    .icon("help", "./template/assets/images/help_icon.svg", 24);
+                    .icon("help", "./template/assets/images/help_icon.svg", 24)
+                    .icon("language", "./template/assets/images/language.svg", 24);
                 $mdThemingProvider.theme('default')
                     .primaryPalette('blue')
                     .accentPalette('red');
@@ -66,6 +67,9 @@
             <md-icon md-svg-icon="menu"><span class="sr-only">Menu</span></md-icon>
         </md-button>
         <h1 flex class="expTitle" id="expTitle">{{heading}}</h1>
+        <md-button class="md-icon-button" aria-label="Language" ng-click="switchLanguage()">
+            <md-icon md-svg-icon="language"><span class="sr-only">Language</span></md-icon>
+        </md-button>
         <md-button class="md-icon-button" aria-label="Help" ng-click="showActionToast()">
             <md-icon md-svg-icon="help"><span class="sr-only">Help</span></md-icon>
         </md-button>
@@ -93,7 +97,7 @@
                         ng-class="{true: 'rotateCounterwise', false: 'rotate'}[isActive1]"></md-icon>
                 </md-button>
 
-                <div ng-hide="showVariables" class="div">
+                <div ng-show="showVariables" class="div">
 
                     <!-- Environment Selection -->
                     <md-content class="md-title selectable" layout-padding>{{choose_environment}}</md-content>
@@ -142,8 +146,8 @@
                         {{no_of_wound_lbl}} {{no_of_wound}}
                     </md-content>
                     <md-slider flex md-discrete ng-disabled="control_disable" ng-model="no_of_wound" step="1" min="1"
-                        max="10" ng-change="noOfWounds();" aria-label="Number of Wounds" aria-valuemin="1"
-                        aria-valuemax="10" aria-valuenow="{{no_of_wound}}"></md-slider>
+                        max="12" ng-change="noOfWounds();" aria-label="Number of Wounds" aria-valuemin="1"
+                        aria-valuemax="12" aria-valuenow="{{no_of_wound}}"></md-slider>
 
                     <!-- Release Flywheel Button -->
                     <section layout="row" layout-align="center center">
