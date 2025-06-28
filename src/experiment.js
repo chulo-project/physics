@@ -584,6 +584,11 @@
             window.enableStartExperimentBtn();
         }
         
+        // Re-enable auto clock control button after reset
+        if (typeof window.enableAutoClockControlBtn === 'function') {
+            window.enableAutoClockControlBtn();
+        }
+        
         // Reset UI state
         scope.release_hold_txt = FlywheelView.btn_lbls[0];
         scope.control_disable = false;
@@ -701,6 +706,11 @@
         // Re-enable start experiment button after reset
         if (typeof window.enableStartExperimentBtn === 'function') {
             window.enableStartExperimentBtn();
+        }
+        
+        // Re-enable auto clock control button after reset
+        if (typeof window.enableAutoClockControlBtn === 'function') {
+            window.enableAutoClockControlBtn();
         }
         
         // Reset UI state
