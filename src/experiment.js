@@ -27,7 +27,9 @@
     window.FlywheelExperiment = window.FlywheelExperiment || {};
     
     // Private variables
-    let autoTimePauseEnabled = false;
+    let autoClockControlEnabled = false;
+    let stopwatchStarted = false;
+    let stopwatchStopped = false;
     
     /**
      * Starts or pauses the rotation of the flywheel.
@@ -40,6 +42,25 @@
         scope.control_disable = true;
         temp_scope.btn_disabled = true;
         FlywheelView.reset_flag = false;
+        
+        // Reset stopwatch states
+        stopwatchStarted = false;
+        stopwatchStopped = false;
+        
+        // Control stopwatch buttons based on auto clock control setting
+        if (autoClockControlEnabled) {
+            // Disable manual stopwatch control when auto control is enabled
+            if (typeof window.disableStopwatchButtons === 'function') {
+                window.disableStopwatchButtons();
+            }
+            // Reset stopwatch to ensure clean timing measurement
+            resetWatch();
+        } else {
+            // Enable manual stopwatch control when auto control is disabled
+            if (typeof window.enableStopwatchButtons === 'function') {
+                window.enableStopwatchButtons();
+            }
+        }
         
         // Start timer updates
         FlywheelView.tick = setInterval(() => { FlywheelView.updateTimer(); }, 200);
@@ -59,13 +80,23 @@
         wheelRolling();
         lineRotation();
         digitRotation();
-        startWatch(FlywheelView.stage);
+        // Don't start stopwatch here - it will start when thread detaches
         woundRelease(FlywheelView.time_slots[FlywheelView.rotation]);
         
         // Update UI with calculated values
         scope.mInertia_lbl = _("Moment of Inertia of Flywheel: ");
         scope.mInertia_val = FlywheelView.moment_of_inertia_of_flywheel.toFixed(4);
         FlywheelView.rolling = true;
+        
+        // Disable start experiment button when experiment starts
+        if (typeof window.disableStartExperimentBtn === 'function') {
+            window.disableStartExperimentBtn();
+        }
+        
+        // Disable auto clock control button when experiment starts
+        if (typeof window.disableAutoClockControlBtn === 'function') {
+            window.disableAutoClockControlBtn();
+        }
     }
 
     /**
@@ -253,9 +284,21 @@
         createjs.Tween.removeAllTweens();
         clearTimeout(FlywheelView.rotation_in);
         
-        if (clockContainer.getChildByName("play").hasEventListener("click")) {
-            clockContainer.getChildByName("play").off("click", FlywheelView.play_event);
-            clockContainer.getChildByName("play").off("click", play_event);
+        // Stop stopwatch when rotation counter becomes stable
+        // Only if auto clock control is enabled
+        if (stopwatchStarted && !stopwatchStopped && autoClockControlEnabled) {
+            pauseWatch();
+            stopwatchStopped = true;
+        }
+        
+        // Enable start experiment button when experiment ends
+        if (typeof window.enableStartExperimentBtn === 'function') {
+            window.enableStartExperimentBtn();
+        }
+        
+        // Enable auto clock control button when experiment ends
+        if (typeof window.enableAutoClockControlBtn === 'function') {
+            window.enableAutoClockControlBtn();
         }
         
         temp_scope.$apply();
@@ -279,9 +322,11 @@
             FlywheelView.getChildName("height_txt").text = height.toFixed(1) + "cm";
         } else if (FlywheelView.rotation === FlywheelView.no_of_wound) {
             FlywheelView.getChildName("height_txt").text = "0.0cm";
-            // Auto time pause logic
-            if (autoTimePauseEnabled) {
-                pauseWatch();
+            // Start stopwatch when thread detaches from axle (height becomes 0.0cm)
+            // Only if auto clock control is enabled
+            if (!stopwatchStarted && autoClockControlEnabled) {
+                startWatch(FlywheelView.stage);
+                stopwatchStarted = true;
             }
         }
         
@@ -525,9 +570,24 @@
         // Set reset flag first to prevent ghost updates
         FlywheelView.reset_flag = true;
         
+        // Reset stopwatch states
+        stopwatchStarted = false;
+        stopwatchStopped = false;
+        
+        // Re-enable stopwatch buttons after reset
+        if (typeof window.enableStopwatchButtons === 'function') {
+            window.enableStopwatchButtons();
+        }
+        
+        // Re-enable start experiment button after reset
+        if (typeof window.enableStartExperimentBtn === 'function') {
+            window.enableStartExperimentBtn();
+        }
+        
         // Reset UI state
         scope.release_hold_txt = FlywheelView.btn_lbls[0];
         scope.control_disable = false;
+        temp_scope.btn_disabled = false;
         
         // Clear all animations and timers
         createjs.Tween.removeAllTweens();
@@ -616,14 +676,6 @@
         massOfRingsChange(scope);
         
         FlywheelView.stage.update();
-        
-        // Reattach play button event listener
-        if (!clockContainer.getChildByName("play").hasEventListener("click")) {
-            FlywheelView.play_event = clockContainer.getChildByName("play").on("click", () => {
-                FlywheelExperiment.releaseHold(scope);
-                scope.$apply();
-            });
-        }
     }
 
     /**
@@ -637,10 +689,25 @@
         // Set reset flag first to prevent ghost updates
         FlywheelView.reset_flag = true;
         
+        // Reset stopwatch states
+        stopwatchStarted = false;
+        stopwatchStopped = false;
+        
+        // Re-enable stopwatch buttons after reset
+        if (typeof window.enableStopwatchButtons === 'function') {
+            window.enableStopwatchButtons();
+        }
+        
+        // Re-enable start experiment button after reset
+        if (typeof window.enableStartExperimentBtn === 'function') {
+            window.enableStartExperimentBtn();
+        }
+        
         // Reset UI state
         scope.release_hold_txt = FlywheelView.btn_lbls[0];
         scope.Enviornment = scope;
         scope.control_disable = false;
+        temp_scope.btn_disabled = false;
         
         // Clear all animations and timers
         createjs.Tween.removeAllTweens();
@@ -684,21 +751,13 @@
         // Redraw initial string and update stage
         drawLongString(385);
         FlywheelView.stage.update();
-        
-        // Reattach play button event listener
-        if (!clockContainer.getChildByName("play").hasEventListener("click")) {
-            FlywheelView.play_event = clockContainer.getChildByName("play").on("click", () => {
-                FlywheelExperiment.releaseHold(scope);
-                scope.$apply();
-            });
-        }
     }
 
     /**
-     * Toggles auto time pause functionality.
+     * Toggles auto clock control functionality.
      */
-    function toggleAutoTimePause() {
-        autoTimePauseEnabled = !autoTimePauseEnabled;
+    function toggleAutoClockControl() {
+        autoClockControlEnabled = !autoClockControlEnabled;
     }
 
     // Public API - expose only what's needed
@@ -720,13 +779,13 @@
     FlywheelExperiment.calculations = calculations;
     FlywheelExperiment.preCalculation = preCalculation;
     FlywheelExperiment.resetExperiment = resetExperiment;
-    FlywheelExperiment.toggleAutoTimePause = toggleAutoTimePause;
+    FlywheelExperiment.toggleAutoClockControl = toggleAutoClockControl;
     FlywheelExperiment.resetExperimentPreserveSettings = resetExperimentPreserveSettings;
     
-    // Expose auto time pause state getter/setter
-    Object.defineProperty(FlywheelExperiment, 'autoTimePauseEnabled', {
-        get: () => autoTimePauseEnabled,
-        set: (value) => { autoTimePauseEnabled = value; }
+    // Expose auto clock control state getter/setter
+    Object.defineProperty(FlywheelExperiment, 'autoClockControlEnabled', {
+        get: () => autoClockControlEnabled,
+        set: (value) => { autoClockControlEnabled = value; }
     });
 
 })();

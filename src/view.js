@@ -112,69 +112,102 @@
                 if (window.stageUpdateInterval) clearInterval(window.stageUpdateInterval);
                 window.stageUpdateInterval = setInterval(function () { stage.update(); }, 16); // ~60 FPS
 
-                // --- Add Auto Time Pause Button ---
+                // --- Add Auto Clock Control Button ---
                 var buttonBar = document.createElement('div');
+                buttonBar.style.position = 'relative';
                 buttonBar.style.display = 'flex';
                 buttonBar.style.flexWrap = 'wrap';
                 buttonBar.style.gap = '10px';
                 buttonBar.style.justifyContent = 'center';
                 buttonBar.style.alignItems = 'center';
                 buttonBar.style.margin = '10px 0';
+                buttonBar.style.padding = '10px';
+                buttonBar.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+                buttonBar.style.borderRadius = '8px';
+                buttonBar.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
 
-                var autoPauseBtn = document.createElement('button');
-                autoPauseBtn.id = 'autoTimePauseBtn';
-                autoPauseBtn.style.padding = '8px 16px';
-                autoPauseBtn.style.fontSize = '1em';
-                autoPauseBtn.style.cursor = 'pointer';
-                autoPauseBtn.innerText = 'Auto Time Pause: OFF';
+                var startExperimentBtn = document.createElement('button');
+                startExperimentBtn.id = 'startExperimentBtn';
+                startExperimentBtn.style.padding = '8px 16px';
+                startExperimentBtn.style.fontSize = '1em';
+                startExperimentBtn.style.cursor = 'pointer';
+                startExperimentBtn.style.background = '#4CAF50';
+                startExperimentBtn.style.color = '#fff';
+                startExperimentBtn.style.border = 'none';
+                startExperimentBtn.style.borderRadius = '4px';
+                startExperimentBtn.style.transition = 'background 0.2s';
+                startExperimentBtn.innerText = 'Start Experiment';
+                startExperimentBtn.onmouseover = function() { startExperimentBtn.style.background = '#388E3C'; };
+                startExperimentBtn.onmouseout = function() { startExperimentBtn.style.background = '#4CAF50'; };
+
+                var autoClockControlBtn = document.createElement('button');
+                autoClockControlBtn.id = 'autoClockControlBtn';
+                autoClockControlBtn.style.padding = '8px 16px';
+                autoClockControlBtn.style.fontSize = '1em';
+                autoClockControlBtn.style.cursor = 'pointer';
+                autoClockControlBtn.style.background = '#2196F3';
+                autoClockControlBtn.style.color = '#fff';
+                autoClockControlBtn.style.border = 'none';
+                autoClockControlBtn.style.borderRadius = '4px';
+                autoClockControlBtn.style.transition = 'background 0.2s';
+                autoClockControlBtn.innerText = 'Auto Clock Control: OFF';
+                autoClockControlBtn.onmouseover = function() { autoClockControlBtn.style.background = '#1976D2'; };
+                autoClockControlBtn.onmouseout = function() { autoClockControlBtn.style.background = '#2196F3'; };
 
                 var quickResetBtn = document.createElement('button');
                 quickResetBtn.id = 'quickResetBtn';
                 quickResetBtn.style.padding = '8px 16px';
                 quickResetBtn.style.fontSize = '1em';
                 quickResetBtn.style.cursor = 'pointer';
-                quickResetBtn.innerText = 'Reset';
                 quickResetBtn.style.background = '#f44336';
                 quickResetBtn.style.color = '#fff';
                 quickResetBtn.style.border = 'none';
                 quickResetBtn.style.borderRadius = '4px';
                 quickResetBtn.style.transition = 'background 0.2s';
+                quickResetBtn.innerText = 'Reset';
                 quickResetBtn.onmouseover = function() { quickResetBtn.style.background = '#d32f2f'; };
                 quickResetBtn.onmouseout = function() { quickResetBtn.style.background = '#f44336'; };
 
-                // Helper to update pause button state based on auto time pause and height
+                // Helper to update pause button state based on auto clock control and height
                 function updatePauseBtnState() {
-                    var pauseBtn = clockContainer?.getChildByName && clockContainer.getChildByName('pause');
-                    var heightTxtObj = container?.getChildByName && container.getChildByName('height_txt');
-                    var heightTxt = heightTxtObj ? heightTxtObj.text : '';
-                    if (window.FlywheelExperiment && window.FlywheelExperiment.autoTimePauseEnabled && heightTxt !== '0.0cm') {
-                        if (pauseBtn) {
-                            pauseBtn.mouseEnabled = false;
-                            pauseBtn.cursor = 'not-allowed';
-                        }
-                    } else {
-                        if (pauseBtn) {
-                            pauseBtn.mouseEnabled = true;
-                            pauseBtn.cursor = 'pointer';
-                        }
+                    var heightTxt = getChildName("height_txt").text;
+                    // Only auto-pause if auto clock control is enabled and height is not 0.0cm
+                    if (window.FlywheelExperiment && window.FlywheelExperiment.autoClockControlEnabled && heightTxt !== '0.0cm') {
+                        // This would be where auto-pause logic would go if needed
+                        // Currently the stopwatch is controlled by the experiment timing
                     }
                 }
                 window.updatePauseBtnState = updatePauseBtnState;
 
-                // Use a fixed-width span for ON/OFF so text doesn't shift
-                function setAutoPauseBtnState() {
-                    var state = (window.FlywheelExperiment && window.FlywheelExperiment.autoTimePauseEnabled) ? 'ON' : 'OFF';
-                    autoPauseBtn.innerHTML = 'Auto Time Pause: <span style="display:inline-block;width:2em;text-align:center;">' + state + '</span>';
+                function setAutoClockControlBtnState() {
+                    var state = (window.FlywheelExperiment && window.FlywheelExperiment.autoClockControlEnabled) ? 'ON' : 'OFF';
+                    autoClockControlBtn.innerHTML = 'Auto Clock Control: <span style="display:inline-block;width:2em;text-align:center;">' + state + '</span>';
                 }
-                setAutoPauseBtnState();
+                setAutoClockControlBtnState();
 
-                autoPauseBtn.onclick = function() {
+                autoClockControlBtn.onclick = function() {
                     if (window.FlywheelExperiment) {
-                        window.FlywheelExperiment.toggleAutoTimePause();
-                        setAutoPauseBtnState();
-                        updatePauseBtnState();
+                        window.FlywheelExperiment.toggleAutoClockControl();
+                        setAutoClockControlBtnState();
                     }
                 };
+
+                startExperimentBtn.onclick = function() {
+                    if (window.angular && angular.element) {
+                        var ngScope = angular.element(document.body).scope();
+                        if (ngScope && window.FlywheelExperiment) {
+                            ngScope.$apply(function() { 
+                                // If experiment has already been run (rolling is true), do soft reset first
+                                if (window.FlywheelView && window.FlywheelView.rolling) {
+                                    window.FlywheelExperiment.resetExperimentPreserveSettings(ngScope);
+                                }
+                                // Start the experiment
+                                window.FlywheelExperiment.releaseHold(ngScope); 
+                            });
+                        }
+                    }
+                };
+
                 quickResetBtn.onclick = function() {
                     if (window.angular && angular.element) {
                         var ngScope = angular.element(document.body).scope();
@@ -185,8 +218,48 @@
                         }
                     }
                 };
-                buttonBar.appendChild(autoPauseBtn);
+
+                // Add buttons to the page
+                buttonBar.appendChild(startExperimentBtn);
+                buttonBar.appendChild(autoClockControlBtn);
                 buttonBar.appendChild(quickResetBtn);
+                
+                // Functions to control start experiment button state
+                function disableStartExperimentBtn() {
+                    startExperimentBtn.disabled = true;
+                    startExperimentBtn.style.background = '#9E9E9E';
+                    startExperimentBtn.style.cursor = 'not-allowed';
+                    startExperimentBtn.style.opacity = '0.6';
+                }
+                
+                function enableStartExperimentBtn() {
+                    startExperimentBtn.disabled = false;
+                    startExperimentBtn.style.background = '#4CAF50';
+                    startExperimentBtn.style.cursor = 'pointer';
+                    startExperimentBtn.style.opacity = '1';
+                }
+                
+                // Functions to control auto clock control button state
+                function disableAutoClockControlBtn() {
+                    autoClockControlBtn.disabled = true;
+                    autoClockControlBtn.style.background = '#9E9E9E';
+                    autoClockControlBtn.style.cursor = 'not-allowed';
+                    autoClockControlBtn.style.opacity = '0.6';
+                }
+                
+                function enableAutoClockControlBtn() {
+                    autoClockControlBtn.disabled = false;
+                    autoClockControlBtn.style.background = '#2196F3';
+                    autoClockControlBtn.style.cursor = 'pointer';
+                    autoClockControlBtn.style.opacity = '1';
+                }
+                
+                // Expose these functions globally so they can be called from experiment.js
+                window.disableStartExperimentBtn = disableStartExperimentBtn;
+                window.enableStartExperimentBtn = enableStartExperimentBtn;
+                window.disableAutoClockControlBtn = disableAutoClockControlBtn;
+                window.enableAutoClockControlBtn = enableAutoClockControlBtn;
+                
                 // Place below the iframe if present, else after the canvas
                 var iframe = document.querySelector('iframe');
                 if (iframe && iframe.parentNode) {
@@ -237,10 +310,6 @@
                     createStopwatch(stage, 20, 500, 1);
                     stage.update();
                     setTimeout(function () { clearInterval(tick) }, 200);
-                    play_event = clockContainer.getChildByName("play").on("click", function () {
-                        FlywheelExperiment.releaseHold(scope);
-                        scope.$apply();
-                    });
                     clockContainer.getChildByName("reset").on("click", function () {
                         resetWatch();
                         stage.update();

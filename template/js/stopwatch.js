@@ -255,6 +255,56 @@ class Stopwatch {
 	showClock(stage) {
 		stage.addChild(this.clockContainer);
 	}
+
+	/**
+	 * Enables the stopwatch buttons for manual control.
+	 */
+	enableButtons() {
+		const playBtn = this.getName("play");
+		const pauseBtn = this.getName("pause");
+		const resetBtn = this.getName("reset");
+		
+		if (playBtn) {
+			playBtn.mouseEnabled = true;
+			playBtn.cursor = "pointer";
+			playBtn.alpha = 1;
+		}
+		if (pauseBtn) {
+			pauseBtn.mouseEnabled = true;
+			pauseBtn.cursor = "pointer";
+			pauseBtn.alpha = 1;
+		}
+		if (resetBtn) {
+			resetBtn.mouseEnabled = true;
+			resetBtn.cursor = "pointer";
+			resetBtn.alpha = 1;
+		}
+	}
+
+	/**
+	 * Disables the stopwatch buttons to prevent manual control.
+	 */
+	disableButtons() {
+		const playBtn = this.getName("play");
+		const pauseBtn = this.getName("pause");
+		const resetBtn = this.getName("reset");
+		
+		if (playBtn) {
+			playBtn.mouseEnabled = false;
+			playBtn.cursor = "not-allowed";
+			playBtn.alpha = 0.5;
+		}
+		if (pauseBtn) {
+			pauseBtn.mouseEnabled = false;
+			pauseBtn.cursor = "not-allowed";
+			pauseBtn.alpha = 0.5;
+		}
+		if (resetBtn) {
+			resetBtn.mouseEnabled = false;
+			resetBtn.cursor = "not-allowed";
+			resetBtn.alpha = 0.5;
+		}
+	}
 }
 
 // Create global instance for backward compatibility
@@ -265,6 +315,8 @@ window.createStopwatch = (stage, x, y, interval) => stopwatch.create(stage, x, y
 window.startWatch = (stage) => stopwatch.startWatch(stage);
 window.pauseWatch = () => stopwatch.pauseWatch();
 window.resetWatch = () => stopwatch.resetWatch();
+window.enableStopwatchButtons = () => stopwatch.enableButtons();
+window.disableStopwatchButtons = () => stopwatch.disableButtons();
 
 // Expose container and listeners for backward compatibility
 Object.defineProperty(window, 'clockContainer', {
