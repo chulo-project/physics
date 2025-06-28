@@ -47,6 +47,7 @@
         "Auto Clock Control: OFF": "Auto Clock Control: OFF",
         "ON": "ON",
         "OFF": "OFF",
-        "Quick Reset": "Quick Reset"
+        "Quick Reset": "Quick Reset",
+        "Wait for experiment to finish": "Wait for experiment to finish"
     }
 }

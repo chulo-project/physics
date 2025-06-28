@@ -143,18 +143,21 @@
                         startExperimentBtn.textContent = _('Start Experiment');
                         autoClockControlBtn.innerHTML = '<span style="display: inline-block; width: 160px; white-space: nowrap;">' + _('Auto Clock Control') + ': ' + _('OFF') + '</span>';
                         quickResetBtn.textContent = _('Quick Reset');
-                        // Also update the auto clock control button state
-                        setAutoClockControlBtnState();
                     }
                 }
                 
                 // Set up language loaded callback
                 window.onLanguageLoaded = function() {
                     updateButtonText();
+                    // Also update the auto clock control button state after translations are loaded
+                    setAutoClockControlBtnState();
                 };
                 
                 // Also try to update immediately in case language is already loaded
-                setTimeout(updateButtonText, 100);
+                setTimeout(function() {
+                    updateButtonText();
+                    setAutoClockControlBtnState();
+                }, 100);
 
                 // Helper to update pause button state based on auto clock control and height
                 function updatePauseBtnState() {
@@ -168,10 +171,13 @@
                 window.updatePauseBtnState = updatePauseBtnState;
 
                 function setAutoClockControlBtnState() {
+                    // Only set button state if translations are loaded
+                    if (!window.translations || Object.keys(window.translations).length === 0) {
+                        return;
+                    }
                     var state = (window.FlywheelExperiment && window.FlywheelExperiment.autoClockControlEnabled) ? _("ON") : _("OFF");
                     autoClockControlBtn.innerHTML = '<span style="display: inline-block; width: 160px; white-space: nowrap;">' + _("Auto Clock Control") + ': ' + state + '</span>';
                 }
-                setAutoClockControlBtnState();
 
                 autoClockControlBtn.onclick = function() {
                     if (window.FlywheelExperiment) {

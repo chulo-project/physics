@@ -47,6 +47,7 @@
         "Auto Clock Control: OFF": "स्वचालित घडी नियन्त्रण: निष्क्रिय",
         "ON": "सक्रिय",
         "OFF": "निष्क्रिय",
-        "Quick Reset": "छिटो रिसेट"
+        "Quick Reset": "छिटो रिसेट",
+        "Wait for experiment to finish": "प्रयोग समाप्त हुन प्रतीक्षा गर्नुहोस्"
     }
 }

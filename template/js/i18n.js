@@ -88,7 +88,15 @@ async function loadLanguage(lang) {
 function _(key) {
     if (!window.translations) {
         console.warn("Translations not loaded yet.");
-        return key;
+        // Provide fallback values for common keys to prevent console warnings
+        const fallbacks = {
+            "ON": "ON",
+            "OFF": "OFF",
+            "Auto Clock Control": "Auto Clock Control",
+            "Quick Reset": "Quick Reset",
+            "Start Experiment": "Start Experiment"
+        };
+        return fallbacks[key] || key;
     }
     const val = window.translations[key];
     if (!val) {

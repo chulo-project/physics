@@ -317,6 +317,7 @@ window.pauseWatch = () => stopwatch.pauseWatch();
 window.resetWatch = () => stopwatch.resetWatch();
 window.enableStopwatchButtons = () => stopwatch.enableButtons();
 window.disableStopwatchButtons = () => stopwatch.disableButtons();
+window.getStopwatchTime = () => stopwatch.totalTime; // Get time in seconds
 
 // Expose container and listeners for backward compatibility
 Object.defineProperty(window, 'clockContainer', {
