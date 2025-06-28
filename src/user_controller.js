@@ -69,36 +69,36 @@ let temp_scope;
          */
         $scope.showActionToast = () => {
             const toast = $mdToast.simple()
-                .content(helpArray[2])
-                .action(helpArray[0])
+                .content(FlywheelView.helpArray[2])
+                .action(FlywheelView.helpArray[0])
                 .hideDelay(15000)
                 .highlightAction(false)
                 .position($scope.getToastPosition());
 
             const toast1 = $mdToast.simple()
-                .content(helpArray[3])
-                .action(helpArray[0])
+                .content(FlywheelView.helpArray[3])
+                .action(FlywheelView.helpArray[0])
                 .hideDelay(15000)
                 .highlightAction(false)
                 .position($scope.getToastPosition());
 
             const toast2 = $mdToast.simple()
-                .content(helpArray[4])
-                .action(helpArray[0])
+                .content(FlywheelView.helpArray[4])
+                .action(FlywheelView.helpArray[0])
                 .hideDelay(15000)
                 .highlightAction(false)
                 .position($scope.getToastPosition());
 
             const toast3 = $mdToast.simple()
-                .content(helpArray[5])
-                .action(helpArray[0])
+                .content(FlywheelView.helpArray[5])
+                .action(FlywheelView.helpArray[0])
                 .hideDelay(15000)
                 .highlightAction(false)
                 .position($scope.getToastPosition());
 
             const toast4 = $mdToast.simple()
-                .content(helpArray[6])
-                .action(helpArray[1])
+                .content(FlywheelView.helpArray[6])
+                .action(FlywheelView.helpArray[1])
                 .hideDelay(15000)
                 .highlightAction(false)
                 .position($scope.getToastPosition());
@@ -188,7 +188,7 @@ let temp_scope;
          */
         $scope.massOfRings = () => {
             mass_of_rings = $scope.mass_of_rings;
-            massOfRingsChange($scope); /*  Function defined in experiment.js file */
+            FlywheelExperiment.massOfRingsChange($scope); /*  Function defined in experiment.js file */
         };
 
         /**
@@ -205,7 +205,7 @@ let temp_scope;
          */
         $scope.noOfWounds = () => {
             no_of_wound = $scope.no_of_wound;
-            noOfWoundsChange($scope); /*  Function defined in experiment.js file */
+            FlywheelExperiment.noOfWoundsChange($scope); /*  Function defined in experiment.js file */
         };
 
         /**
@@ -213,7 +213,7 @@ let temp_scope;
          * Function for the button release/hold wheel
          */
         $scope.releaseHoldWheel = () => {
-            releaseHold($scope); /*  Function defined in experiment.js file */
+            FlywheelExperiment.releaseHold($scope); /*  Function defined in experiment.js file */
         };
 
         /**
@@ -221,7 +221,7 @@ let temp_scope;
          * Function for resetting the experiment
          */
         $scope.resetExp = () => {
-            resetExperiment($scope); /*  Function defined in experiment.js file */
+            FlywheelExperiment.resetExperiment($scope); /*  Function defined in experiment.js file */
         };
 
         /**
