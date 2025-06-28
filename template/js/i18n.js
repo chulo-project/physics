@@ -60,9 +60,7 @@ async function loadLanguage(lang) {
         const data = await response.json();
 
         if (!data.translations || typeof data.translations !== 'object') {
-            console.warn(`Invalid translations format in ${path}`);
-            window.translations = {};
-            return;
+            throw new Error(`Invalid translations format in ${path}`);
         }
 
         window.translations = data.translations;
@@ -70,12 +68,12 @@ async function loadLanguage(lang) {
             window.onLanguageLoaded();
         }
     } catch (err) {
-        console.warn(`Failed to load language '${lang}':`, err.message);
+        console.error(`Failed to load language '${lang}':`, err.message);
         if (lang !== "en-NP") {
             // Attempt to fallback to English
             await loadLanguage("en-NP");
         } else {
-            window.translations = {};
+            throw new Error("Failed to load any language file");
         }
     }
 }
@@ -87,21 +85,9 @@ async function loadLanguage(lang) {
  */
 function _(key) {
     if (!window.translations) {
-        // Provide fallback values for common keys to prevent console warnings
-        const fallbacks = {
-            "ON": "ON",
-            "OFF": "OFF",
-            "Auto Clock Control": "Auto Clock Control",
-            "Quick Reset": "Quick Reset",
-            "Start Experiment": "Start Experiment"
-        };
-        return fallbacks[key] || key;
+        return key; // Return key if translations not loaded yet
     }
     const val = window.translations[key];
-    if (!val) {
-        // Only warn if translations are loaded but key is missing
-        console.warn(`Missing translation key: '${key}'`);
-    }
     return val || key;
 }
 
@@ -111,9 +97,12 @@ window.loadLanguage = loadLanguage;
 window.getParameterByName = getParameterByName;
 
 /**
- * Initialization: auto-detect or use ?lan= override.
+ * Initialization: preload language and show website only after loading.
  */
 (function initI18n() {
+    // Hide the body initially
+    document.body.style.display = 'none';
+    
     const userLang =
         getParameterByName("lan") ||
         navigator.language ||
@@ -122,5 +111,22 @@ window.getParameterByName = getParameterByName;
 
     const normalizedLang = normalizeLanguage(userLang);
     window.translations = {}; // default
-    loadLanguage(normalizedLang);
+    
+    // Load language and show website when ready
+    loadLanguage(normalizedLang).then(() => {
+        // Hide loading screen and show the website after translations are loaded
+        const loadingScreen = document.getElementById('loading-screen');
+        if (loadingScreen) {
+            loadingScreen.style.display = 'none';
+        }
+        document.body.style.display = '';
+    }).catch((error) => {
+        console.error("Failed to initialize language system:", error);
+        // Hide loading screen and show website anyway
+        const loadingScreen = document.getElementById('loading-screen');
+        if (loadingScreen) {
+            loadingScreen.style.display = 'none';
+        }
+        document.body.style.display = '';
+    });
 })();

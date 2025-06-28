@@ -151,6 +151,8 @@
                     updateButtonText();
                     // Also update the auto clock control button state after translations are loaded
                     setAutoClockControlBtnState();
+                    // Update all UI labels with translations
+                    translationLabels();
                 };
                 
                 // Don't call updateButtonText immediately - wait for language to load
@@ -297,7 +299,7 @@
                     initialisationOfControls(scope);
                     thread_anim_rect.graphics.beginStroke("").drawRect(320, 200, 180, 490);
                     initialisationOfImages();
-                    translationLabels();
+                    // Don't call translationLabels here - it will be called when language loads
                     createStopwatch(stage, 20, 500, 1);
                     stage.update();
                     setTimeout(function () { clearInterval(tick) }, 200);
