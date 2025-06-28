@@ -87,7 +87,6 @@ async function loadLanguage(lang) {
  */
 function _(key) {
     if (!window.translations) {
-        console.warn("Translations not loaded yet.");
         // Provide fallback values for common keys to prevent console warnings
         const fallbacks = {
             "ON": "ON",
@@ -100,6 +99,7 @@ function _(key) {
     }
     const val = window.translations[key];
     if (!val) {
+        // Only warn if translations are loaded but key is missing
         console.warn(`Missing translation key: '${key}'`);
     }
     return val || key;

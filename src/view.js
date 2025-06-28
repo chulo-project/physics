@@ -139,7 +139,7 @@
                 
                 // Function to update button text when language loads
                 function updateButtonText() {
-                    if (window._) {
+                    if (window._ && window.translations && Object.keys(window.translations).length > 0) {
                         startExperimentBtn.textContent = _('Start Experiment');
                         autoClockControlBtn.innerHTML = '<span style="display: inline-block; width: 160px; white-space: nowrap;">' + _('Auto Clock Control') + ': ' + _('OFF') + '</span>';
                         quickResetBtn.textContent = _('Quick Reset');
@@ -153,11 +153,8 @@
                     setAutoClockControlBtnState();
                 };
                 
-                // Also try to update immediately in case language is already loaded
-                setTimeout(function() {
-                    updateButtonText();
-                    setAutoClockControlBtnState();
-                }, 100);
+                // Don't call updateButtonText immediately - wait for language to load
+                // The buttons will be updated when onLanguageLoaded is called
 
                 // Helper to update pause button state based on auto clock control and height
                 function updatePauseBtnState() {
