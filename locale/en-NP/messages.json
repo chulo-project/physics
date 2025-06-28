@@ -48,6 +48,7 @@
         "ON": "ON",
         "OFF": "OFF",
         "Quick Reset": "Quick Reset",
-        "Wait for experiment to finish": "Wait for experiment to finish"
+        "Wait for experiment to finish": "Wait for experiment to finish",
+        "kg⋅m²": "kg⋅m²"
     }
 }

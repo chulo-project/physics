@@ -328,7 +328,7 @@
                     scope.axle_diameter_lbl = _("Diameter of axle:");
                     scope.no_of_wound_lbl = _("No. of wound of chord:");
                     scope.mInertia_lbl = _("First start experiment..!");
-                    scope.mInertia_val = "";
+                    scope.mInertia_val = 0.0063 + " " + _("kg⋅m²");
                     btn_lbls = [_("Release fly wheel"), _("Hold fly wheel")];
                     scope.release_hold_txt = btn_lbls[0];
                     scope.reset = _("Reset");
@@ -437,7 +437,7 @@
         FlywheelExperiment.massOfRingsChange(scope);
         scope.control_disable = false;
         scope.btn_disabled = false;
-        scope.mInertia_val = 0.0063;
+        scope.mInertia_val = 0.0063 + " " + _("kg⋅m²");
     }
 
     /**

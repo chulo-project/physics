@@ -601,7 +601,7 @@
                     FlywheelView.time_slots[i + 1] = tempTimeSlots[i + 1] - tempTimeSlots[i];
                 }
 
-                scope.mInertia_val = FlywheelView.moment_of_inertia_of_flywheel.toFixed(4);
+                scope.mInertia_val = FlywheelView.moment_of_inertia_of_flywheel.toFixed(4) + " " + _("kg⋅m²");
                 FlywheelView.last_rotation_angle = parseFloat((numberOfRot % 1).toFixed(2)) * 100;
             }
         } while (angularVelo > 0);
@@ -868,7 +868,7 @@
 
         // Update UI
         scope.mInertia_lbl = _("Moment of Inertia of Flywheel: ");
-        scope.mInertia_val = momentOfInertia.toFixed(4);
+        scope.mInertia_val = momentOfInertia.toFixed(4) + " " + _("kg⋅m²");
     }
 
     /**
